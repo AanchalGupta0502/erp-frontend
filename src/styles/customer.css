@@ -14,7 +14,7 @@ body{
 .title {
   text-align: center;
   color: green;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 /* ================= FORM WRAPPER ================= */
@@ -149,4 +149,7 @@ button:hover {
 
 .frame{
      background: #eaa;
+}
+#sec3{
+  background-color: rgb(30, 169, 121);
 }
