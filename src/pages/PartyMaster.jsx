@@ -4,6 +4,7 @@ import{
     createCustomer,
     getCustomers,
     deleteCustomer,
+    updateCustomer
 } from "../api/customerApi";
 
 function PartyMaster(){
@@ -87,13 +88,76 @@ function PartyMaster(){
 
     const [customers,setCustomers]=useState([]);
     const [currentIndex,setCurrentIndex]=useState(-1);
+    const [isUpdateEnabled,setIsUpdateEnabled]=useState(false);
+    
+    const buildPayload = () => ({
+    name: formData.basic.name,
+    address1: formData.basic.address1,
+    address2: formData.basic.address2,
+    address3: formData.basic.address3,
+    address4: formData.basic.address4,
+    district: formData.basic.district,
+    state: formData.basic.state,
+    pin: formData.basic.pin,
+    stateCd: formData.basic.stateCode,
+    phone1: formData.basic.phone1,
+    phone2: formData.basic.phone2,
+    phone3: formData.basic.phone3,
+    fax: formData.basic.fax,
+    email: formData.basic.email,
+    web: formData.basic.web,
+    rngDiv: formData.basic.rngDiv,
+    panNo: formData.basic.pan,
+    olicno: formData.basic.ecc,
+    gstinNo: formData.basic.gstin,
+
+    waddress1: formData.works.address1,
+    waddress2: formData.works.address2,
+    wdistrict: formData.works.district,
+    wstate: formData.works.state,
+    wpin: formData.works.pin,
+    wstate_cd: formData.works.stateCode,
+    wphone1: formData.works.phone1,
+    wphone2: formData.works.phone2,
+    wfax: formData.works.fax,
+    wgstinNo: formData.works.gstin,
+
+    custTp: formData.other.customerType,
+    aroma: formData.other.aroma,
+    persons: formData.other.enteredBy,
+    reason: formData.other.reason,
+
+    contactPersons: formData.contacts.map(c => ({
+        person: c.person,
+        desig: c.designation
+    })),
+
+    consignees: [{
+        cons: formData.consignee.name,
+        cAddress1: formData.consignee.address1,
+        cAddress2: formData.consignee.address2,
+        cAddress3: formData.consignee.address3,
+        cAddress4: formData.consignee.address4,
+        cDistrict: formData.consignee.district,
+        cState: formData.consignee.state,
+        cPin: formData.consignee.pin,
+        cStateCd: formData.consignee.stateCode,
+        cPhone1: formData.consignee.phone1,
+        cPhone2: formData.consignee.phone2,
+        cPhone3: formData.consignee.phone3,
+        cFax: formData.consignee.fax,
+        cPanNo: formData.consignee.pan,
+        cOlicno: formData.consignee.ecc,
+        cGstinNo: formData.consignee.gstin
+    }]
+});
     
     const fetchCustomers=async()=>{
         try{
             const res=await getCustomers();
             setCustomers(res.data);
         }catch(err){
-            console.error(error);
+            console.error(err);
         }
     };
 
@@ -190,16 +254,11 @@ function PartyMaster(){
 
         setCurrentIndex(index);
     };
+
     const handleSubmit=async()=>{
         try{
-            const payload={
-                ...formData.basic,
-                ...formData.works,
-                ...formData.consignee,
-                ...formData.other,
-                contacts:formData.contacts,
-            };
-            await createCustomer(payLoad);
+            const payload=buildPayload();
+            await createCustomer(payload);
             alert("saved");
             handleAdd(); //clear form
             fetchCustomers(); //refresh list
@@ -276,6 +335,7 @@ function PartyMaster(){
      const handleAdd=()=>{
         setFormData(emptyForm);
         setCurrentIndex(-1);
+        setIsUpdateEnabled(false);
      };
 
      const handleCancel=()=>{
@@ -284,6 +344,7 @@ function PartyMaster(){
         }else{
             handleAdd();
         }
+        setIsUpdateEnabled(false);
      };
 
      const handleExit=()=>{
@@ -296,8 +357,30 @@ function PartyMaster(){
         const index=customers.findIndex((c)=>c.name.toLowerCase()===name.toLowerCase());
         if(index!=-1){
             loadCustomerToForm(index);
+            setIsUpdateEnabled(true); //enable update button
         }else{
             alert("Not found");
+            setIsUpdateEnabled(false);
+        }
+    };
+
+    const handleUpdate= async()=>{
+        if(currentIndex===-1){
+            alert("Find a customer first");
+            return;
+        }
+
+        const id=customers[currentIndex].entryNo;
+
+        try{
+            const payload=buildPayload();
+            await updateCustomer(id,payload);
+            alert("updated Successfully");
+            fetchCustomers();
+            setIsUpdateEnabled(false);
+        }catch(err){
+            console.error(err);
+            alert("Update failed");
         }
     };
 
@@ -329,7 +412,7 @@ function PartyMaster(){
 
     const handleDelete=async()=>{
         if(currentIndex===-1)return ;
-        const id=customers[currentIndex].id;
+        const id=customers[currentIndex].entryNo;
 
         try{
             await deleteCustomer(id);
@@ -602,7 +685,7 @@ function PartyMaster(){
                         <button onClick={goPrev}>Prev</button>
                         <button onClick={goLast}>Last</button>
                         <button onClick={handleFind}>Find</button>
-                        <button onClick={handleUpdate} disabled>Update</button>
+                        <button onClick={handleUpdate} disabled={!isUpdateEnabled}>Update</button>
                         <button onClick={handleAdd}>Add</button>
                         <button onClick={handleSubmit}>Save</button>
                         <button onClick={handleCancel}>Cancel</button>
