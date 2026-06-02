@@ -13,15 +13,28 @@ body{
 /* ================= TITLE ================= */
 .title {
   text-align: center;
-  color: green;
-  margin-bottom: 10px;
+  color:black;
 }
+.line{
 
+    border: none;              /* Remove default border */
+    height: 2px;               /* Thickness of the line */
+    background: radial-gradient(
+        ellipse at center,
+        #f1f8f1 0%,       /* Center color */
+        #ddebdd 40%,      /* Keep thick color in center */
+        transparent 100%  /* Fade to transparent at edges */
+    );
+    width: 90%;                /* Line width */
+    border-radius: 5px;        /* Rounded edges */
+    padding:0px;
+}
 /* ================= FORM WRAPPER ================= */
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
+  padding: 0px;
 }
 
 /* ================= LEFT + RIGHT ================= */
@@ -29,7 +42,6 @@ body{
   display: flex;
   gap: 20px;
   align-items: flex-start;
-  background: #eaa;
   padding: 15px;
   border-radius: 6px;
 }
@@ -150,6 +162,6 @@ button:hover {
 .frame{
      background: #eaa;
 }
-#sec3{
+#Bg-green{
   background-color: rgb(30, 169, 121);
 }

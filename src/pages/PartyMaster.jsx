@@ -133,7 +133,7 @@ function PartyMaster(){
     })),
 
     consignees: [{
-        cons: formData.consignee.name,
+        cons: formData.consignee.cons,
         cAddress1: formData.consignee.address1,
         cAddress2: formData.consignee.address2,
         cAddress3: formData.consignee.address3,
@@ -155,12 +155,16 @@ function PartyMaster(){
     const fetchCustomers=async()=>{
         try{
             const res=await getCustomers();
+              console.log("FULL RESPONSE:", res);
+              console.log(res.data);
             setCustomers(res.data);
+            
         }catch(err){
-            console.error(err);
+            console.error("Fetch error:",err);
         }
     };
-
+    //console.log("customerslength: ",customers[0]);
+    
     useEffect(()=>{
         fetchCustomers();
     },[]);
@@ -174,86 +178,97 @@ function PartyMaster(){
             }
         }));
     };
+const loadCustomerToForm = (index) => {
+    const c = customers[index];
 
-    const loadCustomerToForm=(index)=>{
-        const c=customers[index];
-        if(!c)return ;
+    if (!c) return;
 
-        setFormData({
-    basic: {
-      name: c.name || "",
-      address1: c.address1 || "",
-      address2: c.address2 || "",
-      address3: c.address3 || "",
-      address4: c.address4 || "",
-      district: c.district || "",
-      pin: c.pin || "",
-      state: c.state || "",
-      stateCode: c.stateCode || "",
-      phone1: c.phone1 || "",
-      phone2: c.phone2 || "",
-      phone3: c.phone3 || "",
-      fax: c.fax || "",
-      web: c.web || "",
-      email: c.email || "",
-      rngDiv: c.rngDiv || "",
-      pan: c.pan || "",
-      ecc: c.ecc || "",
-      gstin: c.gstin || "",
-    },
+    console.log("Customer Object:", c);
+    console.log("Contact Persons:", c.contactPersons);
+    const len=c.contactPersons.length;
+        
+    setFormData({
+        basic: {
+            name: c.name || "",
+            address1: c.address1 || "",
+            address2: c.address2 || "",
+            address3: c.address3 || "",
+            address4: c.address4 || "",
+            district: c.district || "",
+            pin: c.pin || "",
+            state: c.state || "",
+            stateCode: c.stateCd || "",
+            phone1: c.phone1 || "",
+            phone2: c.phone2 || "",
+            phone3: c.phone3 || "",
+            fax: c.fax || "",
+            web: c.web || "",
+            email: c.email || "",
+            rngDiv: c.rngDiv || "",
+            pan: c.panNo || "",
+            ecc: c.olicno || "",
+            gstin: c.gstinNo || "",
+        },
 
-    works: {
-      address1: c.waddress1 || "",
-      address2: c.waddress2 || "",
-      district: c.wdistrict || "",
-      pin: c.wpin || "",
-      state: c.wstate || "",
-      stateCode: c.wstateCode || "",
-      phone1: c.wphone1 || "",
-      phone2: c.wphone2 || "",
-      fax: c.wfax || "",
-      gstin: c.wgstin || "",
-    },
+        works: {
+            address1: c.waddress1 || "",
+            address2: c.waddress2 || "",
+            district: c.wdistrict || "",
+            pin: c.wpin || "",
+            state: c.wstate || "",
+            stateCode: c.wstate_cd || "",
+            phone1: c.wphone1 || "",
+            phone2: c.wphone2 || "",
+            fax: c.wfax || "",
+            gstin: c.wgstinNo || "",
+        },
 
-    consignee: {
-      name: c.cname || "",
-      address1: c.caddress1 || "",
-      address2: c.caddress2 || "",
-      address3: c.caddress3 || "",
-      address4: c.caddress4 || "",
-      district: c.cdistrict || "",
-      pin: c.cpin || "",
-      state: c.cstate || "",
-      stateCode: c.cstateCode || "",
-      phone1: c.cphone1 || "",
-      phone2: c.cphone2 || "",
-      phone3: c.cphone3 || "",
-      fax: c.cfax || "",
-      pan: c.cpan || "",
-      ecc: c.cecc || "",
-      gstin: c.cgstin || "",
-    },
+        consignee: {
+            name: c.consignees?.[0]?.cons || "",
+            address1: c.consignees?.[0]?.cAddress1 || "",
+            address2: c.consignees?.[0]?.cAddress2 || "",
+            address3: c.consignees?.[0]?.cAddress3 || "",
+            address4: c.consignees?.[0]?.cAddress4 || "",
+            district: c.consignees?.[0]?.cDistrict || "",
+            pin: c.consignees?.[0]?.cPin || "",
+            state: c.consignees?.[0]?.cState || "",
+            stateCode: c.consignees?.[0]?.cStateCd || "",
+            phone1: c.consignees?.[0]?.cPhone1 || "",
+            phone2: c.consignees?.[0]?.cPhone2 || "",
+            phone3: c.consignees?.[0]?.cPhone3 || "",
+            fax: c.consignees?.[0]?.cFax || "",
+            pan: c.consignees?.[0]?.cPanNo || "",
+            ecc: c.consignees?.[0]?.cOlicno || "",
+            gstin: c.consignees?.[0]?.cGstinNo || "",
+        },
 
-    other: {
-      customerType: c.customerType || "",
-      custTypeDropdown: c.custTypeDropdown || "",
-      aroma: c.aroma || "",
-      dateTime: c.dateTime || "",
-      enteredBy: c.enteredBy || "",
-      reason: c.reason || "",
-    },
+        other: {
+            customerType: c.custTp || "",
+            custTypeDropdown: "",
+            aroma: c.aroma || "",
+            dateTime: c.dtTm || "",
+            enteredBy: c.persons || "",
+            reason: c.reason || "",
+        },
+         // for now we are taking only 5 rows, later we will give option to add row when 5th one is used
+         contacts: [
+            ... (c.contactPersons.map(cp=>({
+                person:cp.person||"",
+                designation:cp.desig||""
 
-    contacts: c.contacts || [
-      { person: "", designation: "" },
-      { person: "", designation: "" },
-      { person: "", designation: "" },
-      { person: "", designation: "" },
-      { person: "", designation: "" },
-    ],
-  });
+            }))||[]),
+            ... Array.from(
+                {length:Math.max(0,5-(c.contactPersons?.length||0))},
+                ()=>({
+                    person:"",
+                    designation:""
+                })
+            )
+         ]
+    });
 
-        setCurrentIndex(index);
-    };
+    setCurrentIndex(index);
+};
 
     const handleSubmit=async()=>{
         try{
@@ -440,10 +455,12 @@ function PartyMaster(){
 
     return(
         <div className="container">
-            <h3 className="title">Customers & Suppliers</h3>
             
             <div className="form-section">
-                <div className="frame1" id="sec3">
+                 <h3 className="title">Customers & Suppliers</h3>
+                <div id="Bg-green">
+                <h3 className="title">Office Address</h3>
+                <div className="frame1">
 
                     {/* LEFT SIDE */}
                     <div className="left">
@@ -525,10 +542,11 @@ function PartyMaster(){
                             <label>GSTIN No:</label>
                             <input type="text" placeholder="GSTIN_NO" className="w-40" value={formData.basic.gstin} onChange={(e)=>handleChange("basic","gstin",e.target.value)}/>
                         </div>
-
-                    </div>
-                
                 </div>
+                 
+               
+                </div>
+                <hr className="line"></hr>
                  <h3 className="title">Works Address</h3>
                 
                 <div className="frame1">
@@ -600,14 +618,32 @@ function PartyMaster(){
                             <input type="text" placeholder="REASON" value={formData.other.reason} onChange={(e)=>handleChange("other","reason",e.target.value)}/>
                         </div>
                     </div>
+                    </div>
                 </div>
+              {/* CONTACT SECTION */}
+                <div className="frame">
+                    <div className="contact-section">
+                        <h3>Contact Person and Designation</h3>
+                        <div className="table">
+                            {formData.contacts.map((c,i)=>(
+                                <div key={i} className="table-row">
+                                    <input placeholder="Person" className="w-50" value={c.person} onChange={(e)=>handleContactChange(i,"person",e.target.value)}/>
+                                    <input placeholder="Designation" className="w-50" value={c.designation} onChange={(e)=>handleContactChange(i,"designation",e.target.value)} />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    </div>
                
-            <h3 className="title"> Consignee Address</h3>
-            <div className="frame1" id="sec3">
+            <div id="Bg-green">
+                <h3 className="title"> Consignee Address</h3>
+                               
+             <div className="frame1">
+            
                 <div className="left">
                     <div className="row">
                         <label>Name:</label>
-                        <input type="text" placeholder="CONS" className="w-50" value={formData.consignee.name} onChange={(e)=>handleChange("consignee","name",e.target.value)}/>
+                        <input type="text" placeholder="CONS" className="w-50" value={formData.consignee.cons} onChange={(e)=>handleChange("consignee","name",e.target.value)}/>
                     </div>
                     <div className="row">
                         <label>Address:</label>
@@ -624,7 +660,7 @@ function PartyMaster(){
                         <input type="text" placeholder="C_DISTRICT" className="w-30" value={formData.consignee.district} onChange={(e)=>handleChange("consignee","district",e.target.value)}/>
                          <label>Pin:</label>
                         <input type="text" placeholder="C_PIN" className="w-20" value={formData.consignee.pin} onChange={(e)=>handleChange("consignee","pin",e.target.value)}/>
-        ``        </div>
+                </div>
                   <div className="row">
                         <label>State:</label>
                         <input type="text" placeholder="C_STATE" className="w-30" value={formData.consignee.state} onChange={(e)=>handleChange("consignee","state",e.target.value)}/>
@@ -663,20 +699,7 @@ function PartyMaster(){
                     </div> 
                 </div>
            </div>
-            {/* CONTACT SECTION */}
-                <div className="frame">
-                    <div className="contact-section">
-                        <h3>Contact Person and Designation</h3>
-                        <div className="table">
-                            {formData.contacts.map((c,i)=>(
-                                <div key={i} className="table-row">
-                                    <input placeholder="Person" className="w-50" value={c.person} onChange={(e)=>handleContactChange(i,"person",e.target.value)}/>
-                                    <input placeholder="Designation" className="w-50" value={c.designation} onChange={(e)=>handleContactChange(i,"designation",e.target.value)} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-               
+           </div>
 
                 {/* BUTTONS */}
                     <div className="buttons">
@@ -694,7 +717,6 @@ function PartyMaster(){
                 
             </div>
           </div>
-        </div>
     );
 }
 
