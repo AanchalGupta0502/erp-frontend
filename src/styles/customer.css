@@ -7,33 +7,16 @@ body{
 .container {
   margin: 0px;
   padding: 0px;
+  width:100%;
   font-family: Arial, sans-serif;
 }
 
-/* ================= TITLE ================= */
-.title {
-  text-align: center;
-  color:black;
-}
-.line{
-
-    border: none;              /* Remove default border */
-    height: 2px;               /* Thickness of the line */
-    background: radial-gradient(
-        ellipse at center,
-        #f1f8f1 0%,       /* Center color */
-        #ddebdd 40%,      /* Keep thick color in center */
-        transparent 100%  /* Fade to transparent at edges */
-    );
-    width: 90%;                /* Line width */
-    border-radius: 5px;        /* Rounded edges */
-    padding:0px;
-}
 /* ================= FORM WRAPPER ================= */
 .form-section {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width:100%;
   padding: 0px;
 }
 
@@ -129,12 +112,23 @@ input {
   flex-direction: column;
   align-items: center;
 }
-
-.table-row {
+.consignee-section {
+  margin-top: 5px;
+  margin-bottom:20px;
+  padding-left: 10px;
+  border-radius: 6px;
   display: flex;
-  gap: 10px;
-  margin-bottom: 5px;
+  justify-content:flex-start;
+  flex-direction: column;
+  align-items:stretch;
+  width:100%;
+  overflow-x:auto;
 }
+
+ table{
+  margin:15px;
+ }
+
 
 /* ================= BUTTONS ================= */
 .buttons {
@@ -158,10 +152,35 @@ button {
 button:hover {
   background-color: #222;
 }
-
+button:disabled{
+  background-color: #d2d4d2;
+  color:black;
+  cursor:none;
+}
+                        
 .frame{
      background: #eaa;
 }
 #Bg-green{
   background-color: rgb(30, 169, 121);
+}
+
+/* ================= TITLE ================= */
+.title {
+  text-align: center;
+  color:black;
+}
+.line{
+
+    border: none;              /* Remove default border */
+    height: 2px;               /* Thickness of the line */
+    background: radial-gradient(
+        ellipse at center,
+        #f1f8f1 0%,       /* Center color */
+        #ddebdd 40%,      /* Keep thick color in center */
+        transparent 100%  /* Fade to transparent at edges */
+    );
+    width: 90%;                /* Line width */
+    border-radius: 5px;        /* Rounded edges */
+    padding:0px;
 }

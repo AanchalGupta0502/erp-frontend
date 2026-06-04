@@ -46,25 +46,14 @@ function PartyMaster(){
     gstin: "",
   },
 
-  // 🔹 CONSIGNEE
-  consignee: {
-    name: "",
-    address1: "",
-    address2: "",
-    address3: "",
-    address4: "",
-    district: "",
-    pin: "",
-    state: "",
-    stateCode: "",
-    phone1: "",
-    phone2: "",
-    phone3: "",
-    fax: "",
-    pan: "",
-    ecc: "",
-    gstin: "",
-  },
+  // 🔹 CONSIGNEE table rn its hardcoded 5 size
+  consignee: [
+    {cons: "",address1: "",address2: "",address3: "",address4: "",district: "",pin: "",state: "",stateCode: "",phone1: "",phone2: "",phone3: "",fax: "",pan: "",ecc: "",gstin: "",},
+    {cons: "",address1: "",address2: "",address3: "",address4: "",district: "",pin: "",state: "",stateCode: "",phone1: "",phone2: "",phone3: "",fax: "",pan: "",ecc: "",gstin: "",},
+    {cons: "",address1: "",address2: "",address3: "",address4: "",district: "",pin: "",state: "",stateCode: "",phone1: "",phone2: "",phone3: "",fax: "",pan: "",ecc: "",gstin: "",},
+    {cons: "",address1: "",address2: "",address3: "",address4: "",district: "",pin: "",state: "",stateCode: "",phone1: "",phone2: "",phone3: "",fax: "",pan: "",ecc: "",gstin: "",},
+    {cons: "",address1: "",address2: "",address3: "",address4: "",district: "",pin: "",state: "",stateCode: "",phone1: "",phone2: "",phone3: "",fax: "",pan: "",ecc: "",gstin: "",},
+  ],
 
   // 🔹 OTHER FIELDS
   other: {
@@ -76,7 +65,7 @@ function PartyMaster(){
     reason: "",
   },
 
-  // 🔹 CONTACT TABLE
+  // 🔹 CONTACT TABLE rn its hardcoded 5 size
   contacts: [
     { person: "", designation: "" },
     { person: "", designation: "" },
@@ -127,29 +116,29 @@ function PartyMaster(){
     persons: formData.other.enteredBy,
     reason: formData.other.reason,
 
-    contactPersons: formData.contacts.map(c => ({
-        person: c.person,
-        desig: c.designation
+    contactPersons: formData.contacts.map(item => ({
+        person: item.person,
+        desig: item.designation
     })),
 
-    consignees: [{
-        cons: formData.consignee.cons,
-        cAddress1: formData.consignee.address1,
-        cAddress2: formData.consignee.address2,
-        cAddress3: formData.consignee.address3,
-        cAddress4: formData.consignee.address4,
-        cDistrict: formData.consignee.district,
-        cState: formData.consignee.state,
-        cPin: formData.consignee.pin,
-        cStateCd: formData.consignee.stateCode,
-        cPhone1: formData.consignee.phone1,
-        cPhone2: formData.consignee.phone2,
-        cPhone3: formData.consignee.phone3,
-        cFax: formData.consignee.fax,
-        cPanNo: formData.consignee.pan,
-        cOlicno: formData.consignee.ecc,
-        cGstinNo: formData.consignee.gstin
-    }]
+    consignees: formData.consignee.map(item=>({
+        cons: item.cons,
+        cAddress1: item.address1,
+        cAddress2: item.address2,
+        cAddress3: item.address3,
+        cAddress4: item.address4,
+        cDistrict: item.district,
+        cState: item.state,
+        cPin: item.pin,
+        cStateCd: item.stateCode,
+        cPhone1: item.phone1,
+        cPhone2: item.phone2,
+        cPhone3: item.phone3,
+        cFax:item.fax,
+        cPanNo: item.pan,
+        cOlicno: item.ecc,
+        cGstinNo:item.gstin
+    }))
 });
     
     const fetchCustomers=async()=>{
@@ -185,6 +174,7 @@ const loadCustomerToForm = (index) => {
 
     console.log("Customer Object:", c);
     console.log("Contact Persons:", c.contactPersons);
+    console.log("Consignees", c.consignees);
     const len=c.contactPersons.length;
         
     setFormData({
@@ -223,24 +213,6 @@ const loadCustomerToForm = (index) => {
             gstin: c.wgstinNo || "",
         },
 
-        consignee: {
-            name: c.consignees?.[0]?.cons || "",
-            address1: c.consignees?.[0]?.cAddress1 || "",
-            address2: c.consignees?.[0]?.cAddress2 || "",
-            address3: c.consignees?.[0]?.cAddress3 || "",
-            address4: c.consignees?.[0]?.cAddress4 || "",
-            district: c.consignees?.[0]?.cDistrict || "",
-            pin: c.consignees?.[0]?.cPin || "",
-            state: c.consignees?.[0]?.cState || "",
-            stateCode: c.consignees?.[0]?.cStateCd || "",
-            phone1: c.consignees?.[0]?.cPhone1 || "",
-            phone2: c.consignees?.[0]?.cPhone2 || "",
-            phone3: c.consignees?.[0]?.cPhone3 || "",
-            fax: c.consignees?.[0]?.cFax || "",
-            pan: c.consignees?.[0]?.cPanNo || "",
-            ecc: c.consignees?.[0]?.cOlicno || "",
-            gstin: c.consignees?.[0]?.cGstinNo || "",
-        },
 
         other: {
             customerType: c.custTp || "",
@@ -250,6 +222,49 @@ const loadCustomerToForm = (index) => {
             enteredBy: c.persons || "",
             reason: c.reason || "",
         },
+        consignee:[
+            ...(c.consignees.map(items=>
+                ({
+                    cons: items.cons || "",
+                    address1: items.cAddress1 || "",
+                    address2: items.cAddress2 || "",
+                    address3: items.cAddress3 || "",
+                    address4: items.cAddress4 || "",
+                    district: items.cDistrict || "",
+                    pin: items.cPin || "",
+                    state: items.cState || "",
+                    stateCode: items.cStateCd || "",
+                    phone1: items.cPhone1 || "",
+                    phone2: items.cPhone2 || "",
+                    phone3: items.cPhone3 || "",
+                    fax: items.cFax || "",
+                    pan: items.cPanNo || "",
+                    ecc: items.cOlicno || "",
+                    gstin: items.cGstinNo || "",
+
+                }))||[]),
+                ...Array.from(
+                    {length:Math.max(0,5-(c.consignees?.length||0))},
+                    ()=>({
+                        name:"",
+                        address1:"",
+                        address2:"",
+                        address3:"",
+                        address4:"",
+                        district:"",
+                        pin:"",
+                        state:"",
+                        stateCode:"",
+                        phone1:"",
+                        phone2:"",
+                        phone3:"",
+                        fax:"",
+                        pan:"",
+                        ecc:"",
+                        gstin:"",
+                    })
+                )
+        ],
          // for now we are taking only 5 rows, later we will give option to add row when 5th one is used
          contacts: [
             ... (c.contactPersons.map(cp=>({
@@ -317,24 +332,7 @@ const loadCustomerToForm = (index) => {
     fax: "",
     gstin: "",
   },
-  consignee: {
-    name: "",
-    address1: "",
-    address2: "",
-    address3: "",
-    address4: "",
-    district: "",
-    pin: "",
-    state: "",
-    stateCode: "",
-    phone1: "",
-    phone2: "",
-    phone3: "",
-    fax: "",
-    pan: "",
-    ecc: "",
-    gstin: "",
-  },
+  
   other: {
     customerType: "",
     custTypeDropdown: "",
@@ -345,7 +343,10 @@ const loadCustomerToForm = (index) => {
   },
   contacts: Array.from({length:5},()=>({
     person:"", designation: "",
- }))
+ })),
+ consignee: Array.from({length:5},()=>({
+    cons: "",address1: "",address2: "",address3: "",address4: "",district: "",pin: "",state: "",stateCode: "",phone1: "",phone2: "",phone3: "",fax: "",pan: "",ecc: "",gstin: "",
+  })),
 };
      const handleAdd=()=>{
         setFormData(emptyForm);
@@ -380,7 +381,7 @@ const loadCustomerToForm = (index) => {
     };
 
     const handleUpdate= async()=>{
-        if(currentIndex===-1){
+       if(currentIndex===-1){
             alert("Find a customer first");
             return;
         }
@@ -451,6 +452,20 @@ const loadCustomerToForm = (index) => {
     ...formData,
     contacts: updatedContacts,
   });
+};
+
+const handleConsigneeChange=(index,field,value)=>{
+    const updatedConsignees=[...formData.consignee];
+
+    updatedConsignees[index]={
+        ...updatedConsignees[index],
+        [field]:value,
+    };
+
+    setFormData({
+        ...formData,
+        consignee:updatedConsignees,
+    })
 };
 
     return(
@@ -621,84 +636,74 @@ const loadCustomerToForm = (index) => {
                     </div>
                 </div>
               {/* CONTACT SECTION */}
-                <div className="frame">
-                    <div className="contact-section">
+                <div className="contact-section">
                         <h3>Contact Person and Designation</h3>
-                        <div className="table">
-                            {formData.contacts.map((c,i)=>(
-                                <div key={i} className="table-row">
-                                    <input placeholder="Person" className="w-50" value={c.person} onChange={(e)=>handleContactChange(i,"person",e.target.value)}/>
-                                    <input placeholder="Designation" className="w-50" value={c.designation} onChange={(e)=>handleContactChange(i,"designation",e.target.value)} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Person</th>
+                                    <th>Designation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    {formData.contacts.map((c,i)=>(
+                                    <tr key={i} >
+                                        <td className="w-50"><input placeholder="Person"  value={c.person} onChange={(e)=>handleContactChange(i,"person",e.target.value)}/></td> 
+                                        <td className="w-50"><input placeholder="Designation" value={c.designation} onChange={(e)=>handleContactChange(i,"designation",e.target.value)} /></td>
+                                        
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                
-            <div id="Bg-green">
-                <h3 className="title"> Consignee Address</h3>
-                               
-             <div className="frame1">
-            
-                <div className="left">
-                    <div className="row">
-                        <label>Name:</label>
-                        <input type="text" placeholder="CONS" className="w-50" value={formData.consignee.cons} onChange={(e)=>handleChange("consignee","name",e.target.value)}/>
-                    </div>
-                    <div className="row">
-                        <label>Address:</label>
-                        <div className="column-inputs">
-                            <input type="text" placeholder="C_ADDRESS1" className="w-50" value={formData.consignee.address1} onChange={(e)=>handleChange("consignee","address1",e.target.value)}/>
-                        <input type="text" placeholder="C_ADDRESS2" className="w-50" value={formData.consignee.address2} onChange={(e)=>handleChange("consignee","address2",e.target.value)}/>
-                        <input type="text" placeholder="C_ADDRESS3" className="w-50" value={formData.consignee.address3} onChange={(e)=>handleChange("consignee","address3",e.target.value)}/>
-                        <input type="text" placeholder="C_ADDRESS4" className="w-50" value={formData.consignee.address4} onChange={(e)=>handleChange("consignee","address4",e.target.value)}/>
-                        </div>
-                        
-                    </div>
-                    <div className="row">
-                        <label>District:</label>
-                        <input type="text" placeholder="C_DISTRICT" className="w-30" value={formData.consignee.district} onChange={(e)=>handleChange("consignee","district",e.target.value)}/>
-                         <label>Pin:</label>
-                        <input type="text" placeholder="C_PIN" className="w-20" value={formData.consignee.pin} onChange={(e)=>handleChange("consignee","pin",e.target.value)}/>
-                </div>
-                  <div className="row">
-                        <label>State:</label>
-                        <input type="text" placeholder="C_STATE" className="w-30" value={formData.consignee.state} onChange={(e)=>handleChange("consignee","state",e.target.value)}/>
-                       <label>State Cd:</label>
-                        <input type="text" placeholder="C_STATE_CD" className="w-20" value={formData.consignee.stateCode} onChange={(e)=>handleChange("consignee","stateCode",e.target.value)}/>
-                    </div>
-                    
-                </div>
-                <div className="right">
-                
-                    <div className="row">
-                        <label>Phone</label>
-                        <input type="text" placeholder="C_PHONE1"className="w-20" value={formData.consignee.phone1} onChange={(e)=>handleChange("consignee","phone1",e.target.value)}/>
-                        <input type="text" placeholder="C_PHONE2" className="w-20" value={formData.consignee.phone2} onChange={(e)=>handleChange("consignee","phone2",e.target.value)}/>
-                        <input type="text" placeholder="C_PHONE3" className="w-20" value={formData.consignee.phone3} onChange={(e)=>handleChange("consignee","phone3",e.target.value)}/>
-                    </div>
-                    
-                    <div className="row">
-                        <label>Fax</label>
-                        <input type="text" placeholder="C_FAX" value={formData.consignee.fax} onChange={(e)=>handleChange("consignee","fax",e.target.value)}/>
-                    </div>
-                    
-                    <div className="row">
-                        <label>PAN No</label>
-                        <input type="text" placeholder="C_PAN_NO" value={formData.consignee.pan} onChange={(e)=>handleChange("consignee","pan",e.target.value)}/>
-                    </div>
-                    
-                    <div className="row">
-                        <label>ECC No</label>
-                        <input type="text" placeholder="C_OLICNO" value={formData.consignee.ecc} onChange={(e)=>handleChange("consignee","ecc",e.target.value)}/>
-                    </div>
-                    
-                    <div className="row">
-                        <label>GSTIN No</label>
-                        <input type="text" placeholder="C_GSTIN_NO" value={formData.consignee.gstin} onChange={(e)=>handleChange("consignee","gstin",e.target.value)}/>
-                    </div> 
-                </div>
-           </div>
+                              
+             <div className="consignee-section" id="Bg-green">
+                   <h3 className="title"> Consignee Address</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address1</th>
+                            <th>Address2</th>
+                            <th>Address3</th>
+                            <th>Address4</th>
+                            <th> District</th>
+                            <th>Pin</th>
+                            <th>State</th>
+                            <th>State Cd</th>
+                            <th>Phone1</th>
+                            <th>Phone2</th>
+                            <th>Phone3</th>
+                            <th>Fax</th>
+                            <th>PAN No</th>
+                            <th>ECC No</th>
+                            <th>GSTIN No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    
+                        {formData.consignee.map((item,i)=>(
+                            <tr key={i}>
+                                <td className="w-50"><input type="text" placeholder="CONS"  value={item.cons} onChange={(e)=>handleConsigneeChange(i,"cons",e.target.value)}/></td>
+                                <td className="w-50"><input type="text" placeholder="C_ADDRESS1"  value={item.address1} onChange={(e)=>handleConsigneeChange(i,"address1",e.target.value)}/></td>
+                                <td className="w-50"><input type="text" placeholder="C_ADDRESS2" value={item.address2} onChange={(e)=>handleConsigneeChange(i,"address2",e.target.value)}/></td>
+                                <td className="w-50"><input type="text" placeholder="C_ADDRESS3"  value={item.address3} onChange={(e)=>handleConsigneeChange(i,"address3",e.target.value)}/></td>
+                                <td className="w-50"><input type="text" placeholder="C_ADDRESS4"  value={item.address4} onChange={(e)=>handleConsigneeChange(i,"address4",e.target.value)}/></td>            
+                                <td className="w-30"><input type="text" placeholder="C_DISTRICT"  value={item.district} onChange={(e)=>handleConsigneeChange(i,"district",e.target.value)}/></td>     
+                                <td className="w-20"><input type="text" placeholder="C_PIN" value={item.pin} onChange={(e)=>handleConsigneeChange(i,"pin",e.target.value)}/></td>
+                                <td className="w-30"><input type="text" placeholder="C_STATE" value={item.state} onChange={(e)=>handleConsigneeChange(i,"state",e.target.value)}/></td>
+                                <td className="w-20"><input type="text" placeholder="C_STATE_CD"  value={item.stateCode} onChange={(e)=>handleConsigneeChange(i,"stateCode",e.target.value)}/></td>
+                                <td className="w-20"><input type="text" placeholder="C_PHONE1" value={item.phone1} onChange={(e)=>handleConsigneeChange(i,"phone1",e.target.value)}/></td>
+                                <td className="w-20"><input type="text" placeholder="C_PHONE2" value={item.phone2} onChange={(e)=>handleConsigneeChange(i,"phone2",e.target.value)}/></td>
+                                <td className="w-20"><input type="text" placeholder="C_PHONE3" value={item.phone3} onChange={(e)=>handleConsigneeChange(i,"phone3",e.target.value)}/></td>
+                                <td><input type="text" placeholder="C_FAX" value={item.fax} onChange={(e)=>handleConsigneeChange(i,"fax",e.target.value)}/></td>
+                                <td><input type="text" placeholder="C_PAN_NO" value={item.pan} onChange={(e)=>handleConsigneeChange(i,"pan",e.target.value)}/></td>
+                                <td><input type="text" placeholder="C_OLICNO" value={item.ecc} onChange={(e)=>handleConsigneeChange(i,"ecc",e.target.value)}/></td>
+                                <td><input type="text" placeholder="C_GSTIN_NO" value={item.gstin} onChange={(e)=>handleConsigneeChange(i,"gstin",e.target.value)}/></td>            
+                            </tr>))}
+                    </tbody>
+                </table>
            </div>
 
                 {/* BUTTONS */}
