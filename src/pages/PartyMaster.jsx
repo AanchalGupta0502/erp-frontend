@@ -58,7 +58,7 @@ function PartyMaster(){
   // 🔹 OTHER FIELDS
   other: {
     customerType: "",
-    custTypeDropdown: "",
+    grUnder:"",
     aroma: "",
     dateTime: "",
     enteredBy: "",
@@ -112,16 +112,22 @@ function PartyMaster(){
     wgstinNo: formData.works.gstin,
 
     custTp: formData.other.customerType,
-    aroma: formData.other.aroma,
+    grUnder:formData.other.grUnder,
+    aroma: formData.other.aroma?"YES":"NO",
     persons: formData.other.enteredBy,
     reason: formData.other.reason,
-
-    contactPersons: formData.contacts.map(item => ({
+    dtTm:formData.other.dateTime,
+    contactPersons: formData.contacts.
+    filter(item=>item.person?.trim()||
+                item.designation?.trim()
+            )
+    .map(item => ({
         person: item.person,
         desig: item.designation
     })),
 
-    consignees: formData.consignee.map(item=>({
+    consignees: formData.consignee.filter(item=>item.cons?.trim())
+    .map(item=>({
         cons: item.cons,
         cAddress1: item.address1,
         cAddress2: item.address2,
@@ -216,8 +222,8 @@ const loadCustomerToForm = (index) => {
 
         other: {
             customerType: c.custTp || "",
-            custTypeDropdown: "",
-            aroma: c.aroma || "",
+            aroma: c.aroma==="YES",
+            grUnder:c.grUnder||"",
             dateTime: c.dtTm || "",
             enteredBy: c.persons || "",
             reason: c.reason || "",
@@ -535,7 +541,7 @@ const handleConsigneeChange=(index,field,value)=>{
 
                         <div className="row">
                             <label>Email:</label>
-                            <input type="text" placeholder="EMAIL" className="w-40" value={formData.basic.email} onChange={(e)=>handleChange("basic","email",e.target.value)}/>
+                            <input type="email" placeholder="EMAIL" className="w-40" value={formData.basic.email} onChange={(e)=>handleChange("basic","email",e.target.value)}/>
                         </div>
 
                         <div className="row">
@@ -602,18 +608,18 @@ const handleConsigneeChange=(index,field,value)=>{
                         </div>
                         <div className="row">
                             <label></label>
-                            <select value={formData.other.custTypeDropdown} onChange={(e)=>handleChange("other","custTypeDropdown",e.target.value)}>
+                            <select value={formData.other.customerType} onChange={(e)=>handleChange("other","customerType",e.target.value)}>
                                 <option value="">CUST_TP</option>
-                                <option value="a">a</option>
-                                <option value="b">b</option>
+                                <option value="Porject">Project</option>
+                                <option value="Fabricator">Fabricator</option>
                             </select>
                         </div>
                         <div className="row">
                             <label></label>
                             
-                            <input type="radio" name="customerType" value="debitor" checked={formData.other.customerType==="debitor"} onChange={(e)=>handleChange("other","customerType",e.target.value)}/>
+                            <input type="radio" name="customerType" value="debitor" checked={formData.other.grUnder==="debitor"} onChange={(e)=>handleChange("other","grUnder",e.target.value)}/>
                             Debtor Customer
-                            <input type="radio" name="customerType" value="supplier" checked={formData.other.customerType==="supplier"} onChange={(e)=>handleChange("other","customerType",e.target.value)}/>
+                            <input type="radio" name="customerType" value="supplier" checked={formData.other.grUnder==="supplier"} onChange={(e)=>handleChange("other","grUnder",e.target.value)}/>
                             Creditor Supplier 
                         </div>
                         <div className="row">
@@ -622,7 +628,7 @@ const handleConsigneeChange=(index,field,value)=>{
                                                    </div>
                         <div className="row">
                             <label>Date & Time:</label>
-                            <input type="text" placeholder="DT_TM" value={formData.other.dateTime} onChange={(e)=>handleChange("other","dateTime",e.target.value)}/>
+                            <input type="date" placeholder="DT_TM" value={formData.other.dateTime} onChange={(e)=>handleChange("other","dateTime",e.target.value)}/>
                         </div>
                         <div className="row">
                             <label>Entered By:</label>
