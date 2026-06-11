@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL="http://localhost:8080/api/customers";
+const BASE_URL="https://erp-backend-springboot-1.onrender.com"
+//const BASE_URL="http://localhost:8080/api/customers";
 
 export const createCustomer=(data)=> axios.post(BASE_URL,data);
 export const getCustomers=()=>axios.get(BASE_URL);
