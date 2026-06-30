@@ -1,0 +1,47 @@
+body{
+    padding:0;
+    margin:0;
+}
+.container{
+    height:100vh;
+    padding: 0px;
+    margin:0px;
+    text-align: center;
+}
+.menu-types{
+    display: flex;
+    flex-direction: column;
+    height:100%;
+    width:100%;
+    gap:10px;
+    border: 2px solid blue;
+   
+}
+.normal{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    height:100%;
+}
+.normal div, .masters div{
+    border: 2px solid rgb(166, 164, 164);
+    width:100%;
+    height:100%;
+
+}
+.normal div button, .masters div button{
+    padding:10px;
+    margin:10px;
+}
+.masters{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    height:100%;
+}
+li{
+    list-style-type: none;
+}
+a{
+    text-decoration: none;
+}
