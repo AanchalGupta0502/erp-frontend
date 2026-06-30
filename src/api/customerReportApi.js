@@ -1,0 +1,5 @@
+import axios from "axios"
+const BASE_URL="http://localhost:8080/api/customerReport"
+
+export const getCustomerByAroma=(aroma)=>axios.get(`${BASE_URL}/${aroma}`);
+export const getCustomerByAromaPDF=(aroma)=>axios.get(`${BASE_URL}/export/pdf/${aroma}`, { responseType: 'blob' });
